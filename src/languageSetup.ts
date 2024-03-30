@@ -187,6 +187,7 @@ function createLanguageClient(options: {
                 vscode.workspace.createFileSystemWatcher('**/*.kts'),
                 vscode.workspace.createFileSystemWatcher('**/*.java'),
                 vscode.workspace.createFileSystemWatcher('**/pom.xml'),
+                vscode.workspace.createFileSystemWatcher('**/klsp.marker'),
                 vscode.workspace.createFileSystemWatcher('**/build.gradle'),
                 vscode.workspace.createFileSystemWatcher('**/settings.gradle')
             ]
