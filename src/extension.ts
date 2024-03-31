@@ -20,8 +20,6 @@ class ExtensionApi {
     }
 }
 
-const extensionApi = new ExtensionApi();
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext): Promise<ExtensionApi> {
@@ -77,14 +75,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
         javaOpts
     });
 
-    
+    let extensionApi = new ExtensionApi();
     
     if (langServerEnabled) {
         initTasks.push(withSpinningStatus(context, async status => {
-            if(extensionApi.kotlinApi) {
-                LOG.info("Language server installation running already, shutting it down and restarting new one..")
-                await extensionApi.kotlinApi.shutdown()
-            }
             extensionApi.kotlinApi = await activateLanguageServer(setupParams(status));
         }));
     } else {
@@ -113,7 +107,4 @@ async function withSpinningStatus(context: vscode.ExtensionContext, action: (sta
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    // shutdown the LSP when VSCode closes to avoid having it running
-    // as a zombie
-    return Promise.all([extensionApi.kotlinApi?.shutdown()])
 }
