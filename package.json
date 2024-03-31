@@ -280,7 +280,12 @@
                 "kotlin.diagnostics.level": {
                     "type": "string",
                     "default": "hint",
-                    "enum": ["error", "warning", "information", "hint"],
+                    "enum": [
+                        "error",
+                        "warning",
+                        "information",
+                        "hint"
+                    ],
                     "description": "The minimum severity of diagnostics to emit."
                 },
                 "kotlin.diagnostics.debounceTime": {
@@ -388,6 +393,7 @@
     },
     "dependencies": {
         "extract-zip": "^2.0.1",
+        "find-process": "^1.4.7",
         "request": "^2.88.2",
         "request-progress": "^3.0.0",
         "request-promise-native": "^1.0.9",

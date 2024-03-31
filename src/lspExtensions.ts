@@ -1,6 +1,7 @@
 import { RequestType0, RequestType } from "vscode-jsonrpc";
 import { TextDocumentIdentifier, TextDocumentPositionParams } from "vscode-languageclient";
 import { LanguageClient } from "vscode-languageclient/node";
+import { LOG } from './util/logger';
 
 export namespace JarClassContentsRequest {
     export const type = new RequestType<TextDocumentIdentifier, string, void>("kotlin/jarClassContents");
@@ -27,5 +28,10 @@ export class KotlinApi {
 
     async getBuildOutputLocation(): Promise<string> {
         return await this.client.sendRequest(BuildOutputLocationRequest.type);
+    }
+
+    async shutdown() {
+        LOG.info("shutting down kotlin lsp server..")
+        return this.client.stop(2000)
     }
 }

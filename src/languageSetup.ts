@@ -1,4 +1,5 @@
 import * as child_process from "child_process";
+import find from "find-process";
 import * as fs from "fs";
 import * as net from "net";
 import * as path from "path";
@@ -189,6 +190,7 @@ function createLanguageClient(options: {
                 vscode.workspace.createFileSystemWatcher('**/pom.xml'),
                 vscode.workspace.createFileSystemWatcher('**/klsp.marker'),
                 vscode.workspace.createFileSystemWatcher('**/build.gradle'),
+                vscode.workspace.createFileSystemWatcher('**/BUILD.bazel'),
                 vscode.workspace.createFileSystemWatcher('**/settings.gradle')
             ]
         },
@@ -238,9 +240,20 @@ export function spawnLanguageServerProcessAndConnectViaTcp(options: {
             resolve({ reader: socket, writer: socket });
         });
         // Wait for the first client to connect
-        server.listen(options.tcpPort, () => {
+        server.listen(options.tcpPort, async () => {
             const tcpPort = (server.address() as net.AddressInfo).port.toString();
+            const processes = await find("name", "java");
+            if (processes.length) {
+                LOG.info(`${processes.length} java processes running..`)
+                const existingServerProcess = processes.filter((proc) => proc.cmd.includes("kotlinLanguageServer"));
+                if (existingServerProcess.length) {
+                    LOG.info(`Killing pid for existing server at ${existingServerProcess[0].pid}`)
+                    // TODO: we should choose the one whose's parent PID corresponds to vscide-server
+                    process.kill(existingServerProcess[0].pid);
+                }
+            }
             const proc = child_process.spawn(options.startScriptPath, ["--tcpClientPort", tcpPort]);
+
             LOG.info("Creating client at {} via TCP port {}", options.startScriptPath, tcpPort);
             
             const outputCallback = data => options.outputChannel.append(`${data}`);
