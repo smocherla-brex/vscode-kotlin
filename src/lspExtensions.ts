@@ -1,7 +1,6 @@
 import { RequestType0, RequestType } from "vscode-jsonrpc";
 import { TextDocumentIdentifier, TextDocumentPositionParams } from "vscode-languageclient";
 import { LanguageClient } from "vscode-languageclient/node";
-import { LOG } from './util/logger';
 
 export namespace JarClassContentsRequest {
     export const type = new RequestType<TextDocumentIdentifier, string, void>("kotlin/jarClassContents");

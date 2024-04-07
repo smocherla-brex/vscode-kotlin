@@ -184,6 +184,7 @@ function createLanguageClient(options: {
             // Notify the server about file changes to 'javaconfig.json' files contain in the workspace
             // TODO this should be registered from the language server side
             fileEvents: [
+                vscode.workspace.createFileSystemWatcher('bazel-out/**/*.txt'),
                 vscode.workspace.createFileSystemWatcher('**/*.kt'),
                 vscode.workspace.createFileSystemWatcher('**/*.kts'),
                 vscode.workspace.createFileSystemWatcher('**/*.java'),
@@ -245,11 +246,10 @@ export function spawnLanguageServerProcessAndConnectViaTcp(options: {
             const processes = await find("name", "java");
             if (processes.length) {
                 LOG.info(`${processes.length} java processes running..`)
-                const existingServerProcess = processes.filter((proc) => proc.cmd.includes("kotlinLanguageServer"));
-                if (existingServerProcess.length) {
-                    LOG.info(`Killing pid for existing server at ${existingServerProcess[0].pid}`)
-                    // TODO: we should choose the one whose's parent PID corresponds to vscide-server
-                    process.kill(existingServerProcess[0].pid);
+                const existingServerProcesses = processes.filter((proc) => proc.cmd.includes("kotlinLanguageServer"));
+                if (existingServerProcesses.length) {
+                    LOG.info(`Killing pids for existing server at ${existingServerProcesses}`)
+                    existingServerProcesses.forEach(p => process.kill(p.pid));  
                 }
             }
             const proc = child_process.spawn(options.startScriptPath, ["--tcpClientPort", tcpPort]);
