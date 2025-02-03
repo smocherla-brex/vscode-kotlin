@@ -184,12 +184,10 @@ function createLanguageClient(options: {
             // Notify the server about file changes to 'javaconfig.json' files contain in the workspace
             // TODO this should be registered from the language server side
             fileEvents: [
-                vscode.workspace.createFileSystemWatcher('bazel-out/**/*.txt'),
                 vscode.workspace.createFileSystemWatcher('**/*.kt'),
                 vscode.workspace.createFileSystemWatcher('**/*.kts'),
                 vscode.workspace.createFileSystemWatcher('**/*.java'),
                 vscode.workspace.createFileSystemWatcher('**/pom.xml'),
-                vscode.workspace.createFileSystemWatcher('**/klsp.marker'),
                 vscode.workspace.createFileSystemWatcher('**/build.gradle'),
                 vscode.workspace.createFileSystemWatcher('**/BUILD.bazel'),
                 vscode.workspace.createFileSystemWatcher('**/settings.gradle')

@@ -7,7 +7,7 @@
         "type": "git",
         "url": "https://github.com/fwcd/vscode-kotlin.git"
     },
-    "version": "0.2.35-brex",
+    "version": "0.2.36-brex",
     "preview": true,
     "publisher": "fwcd",
     "license": "MIT",
